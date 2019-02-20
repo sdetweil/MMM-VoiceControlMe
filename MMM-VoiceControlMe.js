@@ -209,11 +209,12 @@ Module.register('MMM-VoiceControlMe', {
      */
     defaults: {
         timeout: 10,
-        keyword: 'MAGIC MIRROR',
+        keyword: 'HELLO LUCY',
         debug: false,
         standByMethod: 'DPMS',
 		sounds: ["female_hi.wav"],
-		startHideAll:  false,
+        startHideAll:  true,
+        speed: 1000,
 		mainPageModules: ["MMM-VoiceControlMe"],
 		activateMotion: false,
 		pageTwoModules: [],

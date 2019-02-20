@@ -40,9 +40,9 @@ function startListening(){
       '-inmic',
       'yes',
       '-lm',
-      'modules/MMM-voice/' + self.setId + '.lm',
+      'modules/MMM-VoiceControlMe/' + self.setId + '.lm',
       '-dict',
-      'modules/MMM-voice/' + self.setId + '.dic'
+      'modules/MMM-VoiceControlMe/' + self.setId + '.dic'
     ]);
     var psc = self;
 
