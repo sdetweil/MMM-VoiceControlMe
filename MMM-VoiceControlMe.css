@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300');
+
+@-webkit-keyframes MMM-VoiceControlMe-pulse {
+    0% { color: #999; }
+    50% { color: #000; }
+    100% { color: #999; }
+}
+
+.MMM-VoiceControlMe .pulse {
+    -webkit-animation: MMM-VoiceControlMe-pulse 1s infinite;
+    animation: MMM-VoiceControlMe-pulse 1s infinite;
+}
+
+.MMM-VoiceControlMe .icon {
+    margin-right: 5px;
+}
+
+.MMM-VoiceControlMe-blur {
+    -webkit-filter: blur(4px) brightness(10%);
+    filter: blur(4px) brightness(10%);
+}
+
+.MMM-VoiceControlMe .modal {
+   columns: 4;
+  -webkit-columns: 4;
+  -moz-columns: 4;
+   position: fixed; /* or absolute */
+  top: 40%;
+  left: 20%;
+}
+
+.MMM-VoiceControlMeControlMe .modal ul {
+    margin: 0;     
+    font-size: 17px;
+    list-style-type: none;
+    font-family: 'Open Sans Condensed', sans-serif;
+    color: yellow;
+}
