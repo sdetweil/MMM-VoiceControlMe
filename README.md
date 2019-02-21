@@ -40,7 +40,7 @@ functionality to the module. Without his collaboration the module doesn't includ
 
 
 ## Config.js entry and options
-
+```
     {
     disabled: false,
     module: "MMM-VoiceControlMe",
@@ -70,5 +70,5 @@ functionality to the module. Without his collaboration the module doesn't includ
       timeoutMotion: 120000 // 2 minutes
            }
     },
-
+```
 ##
