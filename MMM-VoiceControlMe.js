@@ -213,7 +213,8 @@ Module.register('MMM-VoiceControlMe', {
         debug: false,
         standByMethod: 'DPMS',
 		sounds: ["female_hi.wav"],
-        startHideAll:  true,
+        startHideAll: true,
+        microphone: 0, // Please set correct microphone from the cat output after installation
         speed: 1000,
 		mainPageModules: ["MMM-VoiceControlMe"],
 		activateMotion: false,
@@ -228,7 +229,7 @@ Module.register('MMM-VoiceControlMe', {
 		pageTenModules: [],
 		captureIntervalTime: 1000, // 1 second
         scoreThreshold: 20,
-        timeout: 120000 // 2 minutes
+        timeoutMotion: 120000 // 2 minutes
     },
 
     lastTimeMotionDetected: null,
@@ -259,15 +260,12 @@ Module.register('MMM-VoiceControlMe', {
 		var pageNine = MM.getModules().withClass(this.config.pageNineModules);
 		var pageTen = MM.getModules().withClass(this.config.pageTenModules);
 
-// INSERT IF STATEMENT WHERE INCLUDE BELOW IF 'activateMotion=true'
 		if (this.config.activateMotion) {
 			Log.info('DETECTOR: starting up');
 			console.log('DETECTOR starter');
 			this.lastTimeMotionDetected = new Date();
 			this.sendNotification('ACTIVATE_MONITOR');
 			console.log('DETECTOR started, sendt melding om å skru på skjerm');
-
-	//////////////////////////////////////////////////////////////////////////////////////////
 
 			let _this = this;
 			let canvas = document.createElement('canvas');
@@ -302,7 +300,7 @@ Module.register('MMM-VoiceControlMe', {
 					else {
 						const currentDate = new Date(),
 							time = currentDate.getTime() - _this.lastTimeMotionDetected;
-						if ((time > _this.config.timeout) && (!_this.poweredOff)) {
+						if ((time > _this.config.timeoutMotion) && (!_this.poweredOff)) {
 							_this.sendSocketNotification('DEACTIVATE_MONITOR');						
 							_this.poweredOff = true;
 						}
@@ -320,7 +318,6 @@ Module.register('MMM-VoiceControlMe', {
      * @function getStyles
      * @description Style dependencies for this module.
      * @override
-     *
      * @returns {string[]} List of the style dependency filepaths.
      */
     getStyles() {
@@ -331,9 +328,9 @@ Module.register('MMM-VoiceControlMe', {
      * @function getTranslations
      * @description Translations for this module.
      * @override
-     *
      * @returns {Object.<string, string>} Available translations for this module (key: language code, value: filepath).
      */
+
     getTranslations() {
         return {
             en: 'translations/en.json',
@@ -346,9 +343,9 @@ Module.register('MMM-VoiceControlMe', {
      * @function getDom
      * @description Creates the UI as DOM for displaying in MagicMirror application.
      * @override
-     *
      * @returns {Element}
      */
+
     getDom() {
         const wrapper = document.createElement('div');
         const voice = document.createElement('div');
@@ -404,15 +401,14 @@ Module.register('MMM-VoiceControlMe', {
      * @function notificationReceived
      * @description Handles incoming broadcasts from other modules or the MagicMirror core.
      * @override
-     *
      * @param {string} notification - Notification name
      * @param {*} payload - Detailed payload of the notification.
      */
+
     notificationReceived(notification, payload, sender) {
         var self=this;
 		if (notification === 'DOM_OBJECTS_CREATED') {
             this.sendSocketNotification('START', { config: this.config, modules: this.modules });
-//            this.sendSocketNotification('RunTest');
         } else if (notification === 'REGISTER_VOICE_MODULE') {
             if (Object.prototype.hasOwnProperty.call(payload, 'mode') && Object.prototype.hasOwnProperty.call(payload, 'sentences')) {
                 this.modules.push(payload);
@@ -472,7 +468,7 @@ Module.register('MMM-VoiceControlMe', {
 			  
 ////////////////////////////////////////////////////////////////////////
 ////////////////	 	   Enhanced by @TheStigh		////////////////
-//////////////// 		   to manage haide/show 		////////////////
+//////////////// 		   to manage hide/show 		    ////////////////
 //////////////// 		    modules on startup 			////////////////
 ////////////////////////////////////////////////////////////////////////
 
@@ -499,7 +495,12 @@ Module.register('MMM-VoiceControlMe', {
 ////////////////////////////////////////////////////////////////////////
 
 		if (notification === 'SHOW_ALERT') {				// Alarm clock rings, sends SHOW_ALERT, Receive it here and send SHOW_PAGE_ONE to node_helper of MMM-VoiceControlMe
-			this.sendNotification('SHOW_PAGE_ONE');
+            var showOnStart = MM.getModules().withClass(self.config.mainPageModules);
+            
+            showOnStart.enumerate(function(module) {
+                var callback = function(){};
+                module.show(self.config.speed, callback);
+				});
 			}
 	//},
 
@@ -533,7 +534,7 @@ Module.register('MMM-VoiceControlMe', {
     socketNotificationReceived(notification, payload) {
         if (notification === 'READY') {
             this.icon = 'fa-microphone';
-            this.mode = this.translate('NO_MODE'); 				// <-- was 'NO_MODE' @Mykle
+            this.mode = this.translate('NO_MODE')+this.config.keyword;
             this.pulsing = false;
 			
         } else if (notification === 'LISTENING') {
@@ -583,58 +584,6 @@ Module.register('MMM-VoiceControlMe', {
 
 		} else if (notification === 'HIDE_CAMERA') {
 			this.sendNotification('HIDE_CAMERA');
-
-//        } else if (notification === 'VOICE') {
-//            for (let i = 0; i < this.modules.length; i += 1) {
-//                if (payload.mode === this.modules[i].mode) {
-//                    if (this.mode !== payload.mode) {
-//                        this.help = false;
-//                        this.sendNotification(`${notification}_MODE_CHANGED`, { old: this.mode, new: payload.mode });
-//                        this.mode = payload.mode;
-//                    }
-//                    if (this.mode !== 'VOICE') {
-//                        this.sendNotification(`${notification}_${payload.mode}`, payload.sentence);
-//                    }
-//                    break;
-//                }
-//            }
-
-//		} else if (notification === 'SLEEP_START') {
-//            const list = [];
-//            if (payload.hiding === true) {
-//                // sleep by hiding (energyStar monitors)
-//                MM.getModules().enumerate(function(module) {
-//                     // if the module is already hidden
-//                    if (module.hidden === true) {
-//                        // save it for wake up
-//                        this.c.previouslyHidden.push(module);
-//                        list.push(module.name);
-//                    } else {
-//                        // hide this module
-//                        module.hide(1000);
-//                    }
-//                }.bind( {c:this} ) );
-//            }
-//            this.sendNotification('NOW_ASLEEP', JSON.stringify(list));
-//        
-//		} else if (notification === 'SLEEP_WAKE') {
-//            if (payload.hiding === true) {
-//                // wake by unhiding (energyStar monitors)
-//                //const self = this;
-//                MM.getModules().enumerate(function(module) {
-//                    // if this module was NOT in the previously hidden list
-//                    if (this.c.previouslyHidden.indexOf(module) === -1) {
-//                        // show it
-//                        module.show(1000);
-//                    }
-//                }.bind( {c:this} ) );
-//                // clear the list, if any
-//                this.previouslyHidden = [];
-//            }
-//            this.sendNotification('NOW_AWAKE');
-		
-
-        
 
 ////////////////////////////////////////////////////////////////////////
 /////////////// 	   	  Enhanced by @TheStigh to		////////////////

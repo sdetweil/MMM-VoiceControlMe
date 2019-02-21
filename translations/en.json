@@ -1,6 +1,6 @@
 {
   "INIT": "Initialising...",
-  "NO_MODE": "",
+  "NO_MODE": "Say, ",
   "COMMAND_LIST": "List of all Voice Commands",
   "MODE": "Mode",
   "VOICE_COMMANDS": "Voice Commands"

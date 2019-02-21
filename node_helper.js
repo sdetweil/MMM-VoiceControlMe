@@ -124,9 +124,6 @@ module.exports = NodeHelper.create({
 			if(this.config.standByMethod === 'PI')  		/////////// Turns off HDMI on Pi
 				exec('/opt/vc/bin/tvservice -o', null);
 				this.hdmi = false;		
-
-		} else if(notification === 'SHOW_PAGE_ONE') {
-            this.sendSocketNotification('SHOW_PAGE_ONE');
         }
     },
 
