@@ -6,3 +6,4 @@ docs/
 *.dic
 *.lm
 words.json
+package-lock.json
