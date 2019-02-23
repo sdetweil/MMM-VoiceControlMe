@@ -23,6 +23,12 @@ functionality to the module. Without his collaboration the module doesn't includ
 @Mykle1's original pages and hide/show commands were improved upon. He added some lesser features and is
 the author of this wonderful README file.
 
+## Inspirations
+
+* MMM-voice by Strawberry 3.141
+* motiondetector, camera by alexyak
+* Hello-Lucy by Mykle1
+
 ## Examples
 
 ![](images/1.png)
