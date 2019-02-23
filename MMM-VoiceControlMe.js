@@ -1,7 +1,7 @@
 /**
  * @file MMM-VoiceControlMe.js
  *
- * @originalAuthor fewieden MMM-VoiceControlMe
+ * @originalAuthor fewieden MMM-voice
  * @inspirationalModules Hello-Lucy MMM-ModuleToggle MMM-Hotword MMM-AssistantMk2 MMM-MotionDetector
  * @extended by TheStigh, Mykle1 and Sdetweil
  *
@@ -193,7 +193,8 @@ Module.register('MMM-VoiceControlMe', {
 	  'HIDE GHOST',
 	  'SHOW GHOST',
 	  'HIDE CAMERA',
-	  'SHOW CAMERA',
+      'SHOW CAMERA',
+      'TAKE SELFIE',
         ]
     },
 
@@ -294,7 +295,7 @@ Module.register('MMM-VoiceControlMe', {
 						if (_this.poweredOff) {
 							_this.poweredOff = false;
 							_this.sendSocketNotification('ACTIVATE_MONITOR');
-							console.log('MOTION DETECTED, skru på skjerm!');
+							console.log('MOTION DETECTED, turning monitor on!');
 						}
 					}
 					else {
@@ -490,13 +491,12 @@ Module.register('MMM-VoiceControlMe', {
 		}
 
 ////////////////////////////////////////////////////////////////////////
-//////////////// 	   	   Enhanced by @Mykle1	 		////////////////
+//////////////// 	   	Enhanced by @ & @THeStigh 		////////////////
 //////////////// 		to show page one on alert 		////////////////
 ////////////////////////////////////////////////////////////////////////
 
 		if (notification === 'SHOW_ALERT') {				// Alarm clock rings, sends SHOW_ALERT, Receive it here and send SHOW_PAGE_ONE to node_helper of MMM-VoiceControlMe
             var showOnStart = MM.getModules().withClass(self.config.mainPageModules);
-            
             showOnStart.enumerate(function(module) {
                 var callback = function(){};
                 module.show(self.config.speed, callback);
@@ -583,7 +583,10 @@ Module.register('MMM-VoiceControlMe', {
 			this.sendNotification('SHOW_CAMERA');
 
 		} else if (notification === 'HIDE_CAMERA') {
-			this.sendNotification('HIDE_CAMERA');
+            this.sendNotification('HIDE_CAMERA');
+            
+        } else if (notification === 'TAKE_SELFIE') {
+			this.sendNotification('SELFIE');
 
 ////////////////////////////////////////////////////////////////////////
 /////////////// 	   	  Enhanced by @TheStigh to		////////////////

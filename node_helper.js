@@ -440,6 +440,9 @@ module.exports = NodeHelper.create({
 //																	  //
 //********************************************************************//
 
+        else if (/(TAKE)/g.test(data) && /(SELFIE)/g.test(data)) {
+            this.sendSocketNotification('TAKE_SELFIE');
+        }
 
         else if (/(SHOW)/g.test(data) && /(MODULES)/g.test(data)) {
             this.sendSocketNotification('SHOW_MODULES');
