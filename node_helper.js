@@ -291,6 +291,14 @@ module.exports = NodeHelper.create({
                 this.sendSocketNotification('DEBUG', data);
             }
             if (data.includes(this.config.keyword) || this.listening) {
+// if hotword only, start prosess med å gå online med en gang
+// er dette rett plass å sette inn?
+              if (this.config.onlyHotword) { 
+                  if(this.ps.isListening())
+                      this.ps.stopListening();
+                  console.log("sending socket notification, have released mic");  
+                  this.sendSocketNotification('SUSPENDED');
+                } 
                 this.listening = true;
 				this.sendSocketNotification('LISTENING');
                 if (this.timer) {
@@ -394,15 +402,14 @@ module.exports = NodeHelper.create({
      * @param {string} data - Recognized data
      */
     checkCommands(data) {
-        if (bytes.r[0].test(data) && bytes.r[1].test(data)) {
-            this.sendSocketNotification('BYTES', bytes.a);
 
 ////////////////////////////////////////////////////////////////////////
 //////////////// 		Done by @sdetweil to			////////////////
 //////////////// 	release mic from PocketSphinx		////////////////
 //////////////// 	and create timer and checking		////////////////
 ////////////////////////////////////////////////////////////////////////
-         } else if (/(GO)/g.test(data) && /(ONLINE)/g.test(data)) { 
+        if (/(GO)/g.test(data) && /(ONLINE)/g.test(data)) {
+        //} else if (/(GO)/g.test(data) && /(ONLINE)/g.test(data)) { 
             if(this.ps.isListening())
               this.ps.stopListening();
             console.log("sending socket notification, have released mic");  
@@ -412,12 +419,12 @@ module.exports = NodeHelper.create({
 		} else if (/(PLEASE)/g.test(data) && /(WAKE)/g.test(data) && /(UP)/g.test(data)) {
 			if(this.config.standByMethod === 'DPMS')		/////////// Turns on laptop display and desktop PC with DVI @ Mykle1
 				exec('xset dpms force on', null); 
-			if(this.config.standByMethod === 'PI')  		/////////// Turns off HDMI on Pi
+			if(this.config.standByMethod === 'PI')  		/////////// Turns on HDMI on Pi
 				exec('/opt/vc/bin/tvservice -p && sudo chvt 6 && sudo chvt 7', null);
 				this.hdmi = true;
 
         } else if (/(GO)/g.test(data) && /(SLEEP)/g.test(data)) {
-			if(this.config.standByMethod === 'DPMS')  		/////////// Turns on laptop display and desktop PC with DVI @ Mykle1
+			if(this.config.standByMethod === 'DPMS')  		/////////// Turns off laptop display and desktop PC with DVI @ Mykle1
 				exec('xset dpms force off', null);
 			if(this.config.standByMethod === 'PI')  		/////////// Turns off HDMI on Pi
 				exec('/opt/vc/bin/tvservice -o', null);

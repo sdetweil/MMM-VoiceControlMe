@@ -39,7 +39,7 @@ Module.register('MMM-VoiceControlMe', {
 //////////////// 	release mic from PocketSphinx		////////////////
 ////////////////////////////////////////////////////////////////////////
 	timeout: null, 
-    timeoutSeconds: 10,
+    
 	
 ////////////////////////////////// EOC /////////////////////////////////
 	
@@ -209,28 +209,30 @@ Module.register('MMM-VoiceControlMe', {
      * @property {boolean} debug - Flag to enable debug information.
      */
     defaults: {
-        timeout: 10,
-        keyword: 'HELLO LUCY',
-        debug: false,
-        standByMethod: 'DPMS',
-		sounds: ["female_hi.wav"],
-        startHideAll: true,
-        microphone: 0, // Please set correct microphone from the cat output after installation
-        speed: 1000,
-		mainPageModules: ["MMM-VoiceControlMe"],
-		activateMotion: false,
-		pageTwoModules: [],
-		pageThreeModules: [],
-		pageFourModules: [],
-		pageFiveModules: [],
-		pageSixModules: [],
-		pageSevenModules: [],
-		pageEightModules: [],
-		pageNineModules: [],
-		pageTenModules: [],
-		captureIntervalTime: 1000, // 1 second
-        scoreThreshold: 20,
-        timeoutMotion: 120000 // 2 minutes
+        timeout: 10,                            // timeout listening for a command/sentence
+        keyword: 'HELLO LUCY',                  // keyword to activate listening for a command/sentence
+        debug: false,                           // get debug information in console
+        standByMethod: 'DPMS',                  // 'DPMS' = anything else than RPi or 'PI'
+		sounds: ["female_hi.wav"],              // welcomesound at startup, add several for a random choice of welcome sound
+        startHideAll: true,                     // if true, all modules start as hidden
+        microphone: 0,                          // Please set correct microphone from the cat output after installation
+        speed: 1000,                            // transition speed between show/no-show/show in milliseconds
+		mainPageModules: ["MMM-VoiceControlMe"],// default modules to show on page one/startup
+        activateMotion: false,                  // if true, webcam will be used to activate/deactivate MM on movement
+        onlyHotword: false,                     // TBA - Hotword only to activate external module by sendNotification
+        timeoutSeconds: 10,                     // seconds to wait for external module to confirm control of mic
+        pageTwoModules: [],                     // modules to show on page two
+		pageThreeModules: [],                   // modules to show on page two
+		pageFourModules: [],                    // modules to show on page two
+		pageFiveModules: [],                    // modules to show on page two
+		pageSixModules: [],                     // modules to show on page two
+		pageSevenModules: [],                   // modules to show on page two
+		pageEightModules: [],                   // modules to show on page two
+		pageNineModules: [],                    // modules to show on page two
+		pageTenModules: [],                     // modules to show on page two
+		captureIntervalTime: 1000,              // how often should the webcam check for motion, in milliseconds, default 1 second
+        scoreThreshold: 20,                     // threshold to assume motion/no-motion -> se console log for score
+        timeoutMotion: 120000                   // timeout with no motion until sleep monitor, in milliseconds, default 2 minutes
     },
 
     lastTimeMotionDetected: null,
@@ -553,6 +555,7 @@ Module.register('MMM-VoiceControlMe', {
 
 		/// new handler for detected 'go online' in node_helper
         } else if (notification === 'SUSPENDED') {
+            console.log('>>>>>> Got the message!');
             this.icon='fa-microphone-slash'
             this.pulsing = false;
             this.debugInformation=" ";
@@ -561,7 +564,7 @@ Module.register('MMM-VoiceControlMe', {
             this.timeout=setTimeout(() => {                        // dummy code here for response from other module when done
                     Log.log("mic suspend timeout,  sending socket notification to RESUME_LISTENING")
                     this.notificationReceived('HOTWORD_RESUME');
-                }, this.timeoutSeconds*1000);         
+                }, this.config.timeoutSeconds*1000);         
             this.sendNotification('ASSISTANT_ACTIVATE', {profile:'default'});
 
 ////////////////////////////////// EOC /////////////////////////////////			
