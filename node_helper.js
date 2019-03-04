@@ -60,7 +60,7 @@ module.exports = NodeHelper.create({
     listening: false,
 
     /** @member {(boolean|string)} mode - Contains active module mode. */
-    mode: 'VOICE', // was false,
+    mode: false, // was false,
 
     /** @member {string[]} words - List of all words that are registered by the modules. */
     words: [],
@@ -446,6 +446,10 @@ module.exports = NodeHelper.create({
 //		module you want to hide/show.								  //
 //																	  //
 //********************************************************************//
+
+        else if (/(HELLO)/g.test(data) && /(MIRROR)/g.test(data)) {
+            this.sendSocketNotification('HELLO_MIRROR');
+        }
 
         else if (/(TAKE)/g.test(data) && /(SELFIE)/g.test(data)) {
             this.sendSocketNotification('TAKE_SELFIE');

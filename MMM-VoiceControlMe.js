@@ -53,7 +53,7 @@ Module.register('MMM-VoiceControlMe', {
 ///////////// Add your commands to the sentences array below ///////////////////
 
     voice: {
-	mode: 'Say, HELLO LUCY',
+	mode: 'VOICE',
 	sentences: [
 	  'HIDE ALARM',
 	  'SHOW ALARM',
@@ -195,6 +195,7 @@ Module.register('MMM-VoiceControlMe', {
 	  'HIDE CAMERA',
       'SHOW CAMERA',
       'TAKE SELFIE',
+	  'HELLO MIRROR',
         ]
     },
 
@@ -429,31 +430,31 @@ Module.register('MMM-VoiceControlMe', {
             Log.error("HOTWORD_RESUME received from "+(sender!=null?sender.name:"unknown"))
             Log.error("HOTWORD_RESUME timeout value = "+this.timeout)
             if( this.timeout!=null){
-              Log.error("HOTWORD_RESUME clearing timeout handle")
-              clearTimeout( this.timeout);
-               this.timeout=null;
+				Log.error("HOTWORD_RESUME clearing timeout handle")
+				clearTimeout( this.timeout);
+				this.timeout=null;
             }
-             this.icon = 'fa-microphone';
-             this.pulsing=false;
-  //           Log.error("resume updatedom")
-             this.updateDom(100);
-             this.sendSocketNotification('RESUME_LISTENING');
+				this.icon = 'fa-microphone';
+				this.pulsing=false;
+  //           	Log.error("resume updatedom")
+				this.updateDom(100);
+				this.sendSocketNotification('RESUME_LISTENING');
         // did some other module request the mic?
         // this could also be a confirm using the mic from the other module
         } else if(notification === 'HOTWORD_PAUSE'){ 
             Log.error("HOTWORD_PAUSE received from "+(sender!=null?sender.name:"unknown"))
             Log.error("HOTWORD_PAUSE timeout value = "+this.timeout)
             if( this.timeout!=null){
-              Log.error("HOTWORD_ PAUSE clearing timeout handle")
-              clearTimeout( this.timeout);
-               this.timeout=null;
+				Log.error("HOTWORD_ PAUSE clearing timeout handle")
+				clearTimeout( this.timeout);
+				this.timeout=null;
             }        
-             this.icon='fa-microphone-slash'
-             this.pulsing=false;
-             //Log.error("pause updatedom")
-             this.updateDom(100);
-            // if we send the suspend and already not listening, all is ok
-             this.sendSocketNotification('SUSPEND_LISTENING');
+				this.icon='fa-microphone-slash'
+				this.pulsing=false;
+				//Log.error("pause updatedom")
+				this.updateDom(100);
+				// if we send the suspend and already not listening, all is ok
+				this.sendSocketNotification('SUSPEND_LISTENING');
         }
 
 ////////////////////////////////////////////////////////////////////////
@@ -467,7 +468,7 @@ Module.register('MMM-VoiceControlMe', {
 				 var audio = new Audio(random_file);
 				 audio.src = 'modules/MMM-VoiceControlMe/sounds/'+random_file;
 				 audio.play();
-			  }
+				}
 			  
 ////////////////////////////////////////////////////////////////////////
 ////////////////	 	   Enhanced by @TheStigh		////////////////
@@ -520,7 +521,6 @@ Module.register('MMM-VoiceControlMe', {
 		if (notification === 'ACTIVATE_MONITOR') {
 			this.sendSocketNotification('DEACTIVATE_MONITOR');
 			}
-			
 	},
 
 ////////////////////////////////// EOC /////////////////////////////////
@@ -535,17 +535,34 @@ Module.register('MMM-VoiceControlMe', {
      */
     socketNotificationReceived(notification, payload) {
         if (notification === 'READY') {
+            //console.log(MMM-AssistantMk2.config.startChime);
             this.icon = 'fa-microphone';
             this.mode = this.translate('NO_MODE')+this.config.keyword;
             this.pulsing = false;
 			
         } else if (notification === 'LISTENING') {
             this.pulsing = true;
+
         } else if (notification === 'SLEEPING') {
             this.pulsing = false;
+
         } else if (notification === 'ERROR') {
             this.mode = notification;
 
+        } else if (notification === 'VOICE') {
+            for (let i = 0; i < this.modules.length; i += 1) {
+                if (payload.mode === this.modules[i].mode) {
+                    if (this.mode !== payload.mode) {
+                        this.help = false;
+                        this.sendNotification(`${notification}_MODE_CHANGED`, { old: this.mode, new: payload.mode });
+                        this.mode = payload.mode;
+						}
+                    if (this.mode !== 'VOICE') {
+                        this.sendNotification(`${notification}_${payload.mode}`, payload.sentence);
+						}
+                    break;
+                }
+			}
 
 ////////////////////////////////////////////////////////////////////////
 //////////////// 		Done by @sdetweil to			////////////////
@@ -555,7 +572,6 @@ Module.register('MMM-VoiceControlMe', {
 
 		/// new handler for detected 'go online' in node_helper
         } else if (notification === 'SUSPENDED') {
-            console.log('>>>>>> Got the message!');
             this.icon='fa-microphone-slash'
             this.pulsing = false;
             this.debugInformation=" ";
@@ -590,6 +606,10 @@ Module.register('MMM-VoiceControlMe', {
             
         } else if (notification === 'TAKE_SELFIE') {
 			this.sendNotification('SELFIE');
+			
+		} else if (notification=== 'HELLO_MIRROR') {
+			this.sendNotification('HELLO__MIRROR');
+		
 
 ////////////////////////////////////////////////////////////////////////
 /////////////// 	   	  Enhanced by @TheStigh to		////////////////
@@ -605,16 +625,16 @@ Module.register('MMM-VoiceControlMe', {
 			hide.enumerate(function(module) {
 				Log.log("Hide "+ module.name);
 				var callback = function(){};
-				var options = {lockString: self.identifier};
-				module.hide(self.config.speed, callback, options);
+				//var options = {lockString: self.identifier};
+				module.hide(self.config.speed, callback);
 			});
             
 			var show = MM.getModules().withClass(payload.show);
 			show.enumerate(function(module) {
 				Log.log("Show "+ module.name);
 				var callback = function(){};
-				var options = {lockString: self.identifier};
-				module.show(self.config.speed, callback, options);
+				//var options = {lockString: self.identifier};
+				module.show(self.config.speed, callback);
 			});
 		
 ////////////////////////////////// EOC //////////////////////////////////
