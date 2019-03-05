@@ -447,23 +447,63 @@ module.exports = NodeHelper.create({
 //																	  //
 //********************************************************************//
 
-        else if (/(HELLO)/g.test(data) && /(MIRROR)/g.test(data)) {
+		else if (/(HELLO)/g.test(data) && /(MIRROR)/g.test(data)) {
             this.sendSocketNotification('HELLO_MIRROR');
         }
 
+        else if (/(ZOOM)/g.test(data) && /(IN)/g.test(data)) {
+            this.sendSocketNotification('ZOOM_IN');
+        }
+
+        else if (/(ZOOM)/g.test(data) && /(OUT)/g.test(data)) {
+            this.sendSocketNotification('ZOOM_OUT');
+        }
+
+        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(WIND)/g.test(data)) {
+			this.sendSocketNotification('CHANGE_WIND');
+		}
+
+        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(RAIN)/g.test(data)) {
+			this.sendSocketNotification('CHANGE_RAIN');
+		}
+
+        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(CLOUDS)/g.test(data)) {
+			this.sendSocketNotification('CHANGE_CLOUDS');
+		}
+
+        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(TEMPERATURE)/g.test(data)) {
+			this.sendSocketNotification('CHANGE_TEMP');
+		}			
+
+        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(PRESSURE)/g.test(data)) {
+			this.sendSocketNotification('CHANGE_PRESSURE');
+		}			
+
+        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(CURRENTS)/g.test(data)) {
+			this.sendSocketNotification('CHANGE_CURRENTS');
+		}			
+
+        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(WAVES)/g.test(data)) {
+			this.sendSocketNotification('CHANGE_WAVES');
+		}
+		
         else if (/(TAKE)/g.test(data) && /(SELFIE)/g.test(data)) {
             this.sendSocketNotification('TAKE_SELFIE');
         }
 
         else if (/(SHOW)/g.test(data) && /(MODULES)/g.test(data)) {
             this.sendSocketNotification('SHOW_MODULES');
-        } else if (/(HIDE)/g.test(data) && /(MODULES)/g.test(data)) {
+        } 
+		
+		else if (/(HIDE)/g.test(data) && /(MODULES)/g.test(data)) {
             this.sendSocketNotification('HIDE_MODULES');
         }
 
         else if (/(SHOW)/g.test(data) && /(CAMERA)/g.test(data)) {
 			this.sendSocketNotification('SHOW_CAMERA');
-        } else if (/(HIDE)/g.test(data) && /(CAMERA)/g.test(data)) {
+        } 
+		
+		else if (/(HIDE)/g.test(data) && /(CAMERA)/g.test(data)) {
 			this.sendSocketNotification('HIDE_CAMERA');
         }
 

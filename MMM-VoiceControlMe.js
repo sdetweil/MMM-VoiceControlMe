@@ -196,6 +196,15 @@ Module.register('MMM-VoiceControlMe', {
       'SHOW CAMERA',
       'TAKE SELFIE',
 	  'HELLO MIRROR',
+	  'ZOOM IN',
+	  'ZOOM OUT',
+	  'CHANGE TO WIND',
+	  'CHANGE TO RAIN',
+	  'CHANGE TO CLOUDS',
+	  'CHANGE TO TEMPERATURE',
+	  'CHANGE TO PRESSURE',
+	  'CHANGE TO CURRENTS',
+	  'CHANGE TO WAVES',
         ]
     },
 
@@ -610,6 +619,33 @@ Module.register('MMM-VoiceControlMe', {
 		} else if (notification=== 'HELLO_MIRROR') {
 			this.sendNotification('HELLO__MIRROR');
 		
+		} else if (notification=== 'ZOOM-IN') {
+			this.sendNotification('ZOOMIN');
+			
+		} else if (notification=== 'ZOOM_OUT') {
+			this.sendNotification('ZOOMOUT');
+			
+		} else if (notification=== 'CHANGE_WIND') {
+			this.sendNotification('CHANGEWIND');
+			
+		} else if (notification=== 'CHANGE_RAIN') {
+			this.sendNotification('CHANGERAIN');
+			
+		} else if (notification=== 'CHANGE_CLOUDS') {
+			this.sendNotification('CHANGECLOUDS');
+			
+		} else if (notification=== 'CHANGE_TEMP') {
+			this.sendNotification('CHANGETEMP');
+			
+		} else if (notification=== 'CHANGE_PRESSURE') {
+			this.sendNotification('CHANGEPRESSURE');
+			
+		} else if (notification=== 'CHANGE_CURRENTS') {
+			this.sendNotification('CHANGECURRENTS');
+			
+		} else if (notification=== 'CHANGE_WAVES') {
+			this.sendNotification('CHANGEWAVES');
+
 
 ////////////////////////////////////////////////////////////////////////
 /////////////// 	   	  Enhanced by @TheStigh to		////////////////
