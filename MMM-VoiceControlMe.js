@@ -195,7 +195,6 @@ Module.register('MMM-VoiceControlMe', {
 	  'HIDE CAMERA',
       'SHOW CAMERA',
       'TAKE SELFIE',
-	  'HELLO MIRROR',
 	  'ZOOM IN',
 	  'ZOOM OUT',
 	  'SHOW ME WIND',
@@ -204,7 +203,9 @@ Module.register('MMM-VoiceControlMe', {
 	  'SHOW ME TEMPERATURE',
 	  'SHOW ME PRESSURE',
 	  'SHOW ME CURRENTS',
-	  'SHOW ME WAVES',
+      'SHOW ME WAVES',
+      'SHOW DEFAULT ZOOM',
+      'ROTATE LAYER'
         ]
     },
 
@@ -616,8 +617,8 @@ Module.register('MMM-VoiceControlMe', {
         } else if (notification === 'TAKE_SELFIE') {
 			this.sendNotification('SELFIE');
 			
-		} else if (notification=== 'HELLO_MIRROR') {
-			this.sendNotification('HELLO__MIRROR');
+		} else if (notification=== 'ROTATE_LAYER') {
+			this.sendNotification('ROTATELAYER');
 		
 		} else if (notification=== 'ZOOM_IN') {
 			this.sendNotification('ZOOMIN');
@@ -646,6 +647,8 @@ Module.register('MMM-VoiceControlMe', {
 		} else if (notification=== 'CHANGE_WAVES') {
 			this.sendNotification('CHANGEWAVES');
 
+        } else if (notification=== 'DEFAULT_ZOOM') {
+			this.sendNotification('DEFAULTZOOM');
 
 ////////////////////////////////////////////////////////////////////////
 /////////////// 	   	  Enhanced by @TheStigh to		////////////////

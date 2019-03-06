@@ -447,8 +447,8 @@ module.exports = NodeHelper.create({
 //																	  //
 //********************************************************************//
 
-		else if (/(HELLO)/g.test(data) && /(MIRROR)/g.test(data)) {
-            this.sendSocketNotification('HELLO_MIRROR');
+		else if (/(ROTATE)/g.test(data) && /(LAYER)/g.test(data)) {
+            this.sendSocketNotification('ROTATE_LAYER')
         }
 
         else if (/(ZOOM)/g.test(data) && /(IN)/g.test(data)) {
@@ -459,6 +459,10 @@ module.exports = NodeHelper.create({
             this.sendSocketNotification('ZOOM_OUT');
         }
 
+        else if (/(SHOW)/g.test(data) && /(DEFAULT)/g.test(data) && /(ZOOM)/g.test(data)) {
+			this.sendSocketNotification('DEFAULT_ZOOM');
+		}
+        
         else if (/(SHOW)/g.test(data) && /(ME)/g.test(data) && /(WIND)/g.test(data)) {
 			this.sendSocketNotification('CHANGE_WIND');
 		}
