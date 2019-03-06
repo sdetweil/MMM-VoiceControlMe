@@ -532,9 +532,9 @@ module.exports = NodeHelper.create({
         }
 
         else if (/(SHOW)/g.test(data) && /(WIND)/g.test(data)) {
- 			this.sendSocketNotification('MODULE_STATUS',{hide: [], show: ["MMM-Windy"], toggle:[]});
+ 			this.sendSocketNotification('MODULE_STATUS',{hide: [], show: ["MMM-WindyV2"], toggle:[]});
         } else if (/(HIDE)/g.test(data) && /(WIND)/g.test(data)) {
-			this.sendSocketNotification('MODULE_STATUS',{hide: ["MMM-Windy"], show: [], toggle:[]});
+			this.sendSocketNotification('MODULE_STATUS',{hide: ["MMM-WindyV2"], show: [], toggle:[]});
         }
 
         else if (/(SHOW)/g.test(data) && /(FORECAST)/g.test(data)) {
