@@ -459,31 +459,31 @@ module.exports = NodeHelper.create({
             this.sendSocketNotification('ZOOM_OUT');
         }
 
-        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(WIND)/g.test(data)) {
+        else if (/(SHOW)/g.test(data) && /(ME)/g.test(data) && /(WIND)/g.test(data)) {
 			this.sendSocketNotification('CHANGE_WIND');
 		}
 
-        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(RAIN)/g.test(data)) {
+        else if (/(SHOW)/g.test(data) && /(ME)/g.test(data) && /(RAIN)/g.test(data)) {
 			this.sendSocketNotification('CHANGE_RAIN');
 		}
 
-        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(CLOUDS)/g.test(data)) {
+        else if (/(SHOW)/g.test(data) && /(ME)/g.test(data) && /(CLOUDS)/g.test(data)) {
 			this.sendSocketNotification('CHANGE_CLOUDS');
 		}
 
-        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(TEMPERATURE)/g.test(data)) {
+        else if (/(SHOW)/g.test(data) && /(ME)/g.test(data) && /(TEMPERATURE)/g.test(data)) {
 			this.sendSocketNotification('CHANGE_TEMP');
 		}			
 
-        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(PRESSURE)/g.test(data)) {
+        else if (/(SHOW)/g.test(data) && /(ME)/g.test(data) && /(PRESSURE)/g.test(data)) {
 			this.sendSocketNotification('CHANGE_PRESSURE');
 		}			
 
-        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(CURRENTS)/g.test(data)) {
+        else if (/(SHOW)/g.test(data) && /(ME)/g.test(data) && /(CURRENTS)/g.test(data)) {
 			this.sendSocketNotification('CHANGE_CURRENTS');
 		}			
 
-        else if (/(CHANGE)/g.test(data) && /(TO)/g.test(data) && /(WAVES)/g.test(data)) {
+        else if (/(SHOW)/g.test(data) && /(ME)/g.test(data) && /(WAVES)/g.test(data)) {
 			this.sendSocketNotification('CHANGE_WAVES');
 		}
 		

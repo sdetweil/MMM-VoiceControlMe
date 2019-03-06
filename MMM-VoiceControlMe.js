@@ -198,13 +198,13 @@ Module.register('MMM-VoiceControlMe', {
 	  'HELLO MIRROR',
 	  'ZOOM IN',
 	  'ZOOM OUT',
-	  'CHANGE TO WIND',
-	  'CHANGE TO RAIN',
-	  'CHANGE TO CLOUDS',
-	  'CHANGE TO TEMPERATURE',
-	  'CHANGE TO PRESSURE',
-	  'CHANGE TO CURRENTS',
-	  'CHANGE TO WAVES',
+	  'SHOW ME WIND',
+	  'SHOW ME RAIN',
+	  'SHOW ME CLOUDS',
+	  'SHOW ME TEMPERATURE',
+	  'SHOW ME PRESSURE',
+	  'SHOW ME CURRENTS',
+	  'SHOW ME WAVES',
         ]
     },
 
@@ -619,7 +619,7 @@ Module.register('MMM-VoiceControlMe', {
 		} else if (notification=== 'HELLO_MIRROR') {
 			this.sendNotification('HELLO__MIRROR');
 		
-		} else if (notification=== 'ZOOM-IN') {
+		} else if (notification=== 'ZOOM_IN') {
 			this.sendNotification('ZOOMIN');
 			
 		} else if (notification=== 'ZOOM_OUT') {
