@@ -221,11 +221,11 @@ Module.register('MMM-VoiceControlMe', {
      */
     defaults: {
         timeout: 10,                            // timeout listening for a command/sentence
-        keyword: 'HELLO LUCY',                  // keyword to activate listening for a command/sentence
+        keyword: 'Magic Mirror',                  // keyword to activate listening for a command/sentence
         debug: false,                           // get debug information in console
         standByMethod: 'DPMS',                  // 'DPMS' = anything else than RPi or 'PI'
-		sounds: ["female_hi.wav"],              // welcomesound at startup, add several for a random choice of welcome sound
-        startHideAll: true,                     // if true, all modules start as hidden
+		sounds: [],              // welcomesound at startup, add several for a random choice of welcome sound
+        startHideAll: false,                     // if true, all modules start as hidden
         microphone: 0,                          // Please set correct microphone from the cat output after installation
         speed: 1000,                            // transition speed between show/no-show/show in milliseconds
 		mainPageModules: ["MMM-VoiceControlMe"],// default modules to show on page one/startup
@@ -307,17 +307,42 @@ Module.register('MMM-VoiceControlMe', {
 						_this.lastTimeMotionDetected = new Date();
 						if (_this.poweredOff) {
 							_this.poweredOff = false;
-							_this.sendSocketNotification('ACTIVATE_MONITOR');
+              if(this.config.standByMethod !=='HIDE')
+                _this.sendSocketNotification('ACTIVATE_MONITOR');
+              else {
+                MM.getModules().enumerate((module) => {
+                   // if the module is already hidden
+                   if(module.hidden==true)
+                      // save it for wake up
+                      _this.previouslyHidden.push(module.identifier)
+                   else
+                      // hide this module
+                      module.hide(1000);
+                });
+              }
 							console.log('MOTION DETECTED, turning monitor on!');
 						}
 					}
 					else {
 						const currentDate = new Date(),
-							time = currentDate.getTime() - _this.lastTimeMotionDetected;
-						if ((time > _this.config.timeoutMotion) && (!_this.poweredOff)) {
-							_this.sendSocketNotification('DEACTIVATE_MONITOR');						
-							_this.poweredOff = true;
-						}
+            time = currentDate.getTime() - _this.lastTimeMotionDetected;
+            if ((time > _this.config.timeoutMotion) && (!_this.poweredOff) && (this.config.standByMethod !=='HIDE')){               
+              _this.sendSocketNotification('DEACTIVATE_MONITOR');
+            }  
+            else {
+              MM.getModules().enumerate((module) => {
+                // if this module was NOT in the previously hidden list
+                //Log.log("looking for module ="+module.name+" in previous list");
+                if(_self.previouslyHidden.indexOf(module.identifier)==-1)
+                {
+                  // show it
+                  module.show(1000);
+                }
+              });
+              // clear the list, if any
+              _self.previously_hidden = [];
+            }  
+            _this.poweredOff = true;
 					}
 					const info = 'DETECTOR: score ' + score;
 					Log.info(info);
@@ -440,31 +465,31 @@ Module.register('MMM-VoiceControlMe', {
             Log.error("HOTWORD_RESUME received from "+(sender!=null?sender.name:"unknown"))
             Log.error("HOTWORD_RESUME timeout value = "+this.timeout)
             if( this.timeout!=null){
-				Log.error("HOTWORD_RESUME clearing timeout handle")
-				clearTimeout( this.timeout);
-				this.timeout=null;
+              Log.error("HOTWORD_RESUME clearing timeout handle")
+              clearTimeout( this.timeout);
+              this.timeout=null;
             }
-				this.icon = 'fa-microphone';
-				this.pulsing=false;
-  //           	Log.error("resume updatedom")
-				this.updateDom(100);
-				this.sendSocketNotification('RESUME_LISTENING');
+            this.icon = 'fa-microphone';
+            this.pulsing=false;
+      //           	Log.error("resume updatedom")
+            this.updateDom(100);
+            this.sendSocketNotification('RESUME_LISTENING');
         // did some other module request the mic?
         // this could also be a confirm using the mic from the other module
         } else if(notification === 'HOTWORD_PAUSE'){ 
             Log.error("HOTWORD_PAUSE received from "+(sender!=null?sender.name:"unknown"))
             Log.error("HOTWORD_PAUSE timeout value = "+this.timeout)
             if( this.timeout!=null){
-				Log.error("HOTWORD_ PAUSE clearing timeout handle")
-				clearTimeout( this.timeout);
-				this.timeout=null;
+                Log.error("HOTWORD_ PAUSE clearing timeout handle")
+                clearTimeout( this.timeout);
+                this.timeout=null;
             }        
-				this.icon='fa-microphone-slash'
-				this.pulsing=false;
-				//Log.error("pause updatedom")
-				this.updateDom(100);
-				// if we send the suspend and already not listening, all is ok
-				this.sendSocketNotification('SUSPEND_LISTENING');
+            this.icon='fa-microphone-slash'
+            this.pulsing=false;
+            //Log.error("pause updatedom")
+            this.updateDom(100);
+            // if we send the suspend and already not listening, all is ok
+            this.sendSocketNotification('SUSPEND_LISTENING');
         }
 
 ////////////////////////////////////////////////////////////////////////
@@ -473,12 +498,14 @@ Module.register('MMM-VoiceControlMe', {
 ////////////////////////////////////////////////////////////////////////
 
 		if (notification === 'DOM_OBJECTS_CREATED') {
+        if(this.config.sounds.length>0){
 				 var audio_files = this.config.sounds;
 				 var random_file = audio_files[Math.floor(Math.random() * audio_files.length)];
 				 var audio = new Audio(random_file);
 				 audio.src = 'modules/MMM-VoiceControlMe/sounds/'+random_file;
 				 audio.play();
-				}
+        }
+		}
 			  
 ////////////////////////////////////////////////////////////////////////
 ////////////////	 	   Enhanced by @TheStigh		////////////////
